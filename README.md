@@ -76,7 +76,7 @@ const rest = new REST({ version: "10" }).setToken(token)
 })()
 ```
 
-Builders are also compatible with ApplicationCommandManager.set() from [Discord.js](https://discord.js.org/#/docs/discord.js/main/general/welcome):
+Builders are also compatible with [ApplicationCommandManager.set()](https://discord.js.org/#/docs/discord.js/main/class/ApplicationCommandManager?scrollTo=set) from [Discord.js](https://discord.js.org/#/docs/discord.js/main/general/welcome):
 ```js
 await client.application.commands.set(globalCommands)
   .then(data => console.log(`Successfully reloaded ${data.length} application commands.`))

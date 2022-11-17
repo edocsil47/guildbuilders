@@ -62,7 +62,7 @@ const rest = new REST({ version: "10" }).setToken(token)
       .then(data => console.log(`Successfully reloaded ${data.length} application commands.`))
     
     // Using .put with a different Route can register commands to a guild
-    const guildCommands = commands.filter(c => c.guildIds.includes(guildId))
+    const guildCommands = commands.filter(c => c.guildIds?.includes(guildId))
     await rest.put(
       Routes.applicationGuildCommands(clientId, guildId),
       { body: globalCommands },

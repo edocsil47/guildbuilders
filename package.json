@@ -1,0 +1,12 @@
+{
+  "name": "guildbuilders",
+  "version": "1.0.0",
+  "description": "More builders to help manage application commands for applications and guilds",
+  "main": "index.js",
+  "author": "edocsil47",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/edocsil47/guildbuilders/issues"
+  },
+  "homepage": "https://github.com/edocsil47/guildbuilders#readme"
+}

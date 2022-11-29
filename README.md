@@ -10,9 +10,11 @@ Contents:
 
 # Installation
 
-**[Discord.js](https://discord.js.org/#/docs/discord.js/main/general/welcome) and its dependencies are required**
+```
+npm i .\<local directory>\
+```
 
-To install `guildbuilders`, copy the contents of `node_modules/guildbuilders` into your project's /node_modules` folder
+**[Discord.js](https://discord.js.org/#/docs/discord.js/main/general/welcome) and its dependencies are required**
 
 # Example usage
 

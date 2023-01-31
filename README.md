@@ -6,7 +6,10 @@ Contents:
 2. [Example usage](#example-usage)
 3. [Classes](#classes)  
   3.1. [GuildContextMenuCommandBuilder](#guildcontextmenucommandbuilder-extends-contextmenucommandbuilder)  
-  3.2. [GuildSlashCommandBuilder](#guildslashcommandbuilder-extends-slashcommandbuilder)
+  3.2. [GuildSlashCommandBuilder](#guildslashcommandbuilder-extends-slashcommandbuilder)  
+4. [Functions](#functions)  
+  4.1. [filterGlobalCommands](#filterglobalcommandscommandarray)  
+  4.2. [filterGuildCommands](#filterguildcommandscommandarray-guildid)
 
 # Installation
 
@@ -22,7 +25,7 @@ Credit to [discord.js](https://discord.js.org/#/docs/discord.js/main/general/wel
 
 Use new builders to easily find and deploy application commands to both guilds and your bot globally:
 ```js
-const { GuildSlashCommandBuilder, GuildContextMenuCommandBuilder } = require("guildbuilders")
+const { GuildSlashCommandBuilder, GuildContextMenuCommandBuilder, filterGlobalCommands, filterGuildCommands } = require("guildbuilders")
 
 const { REST, Routes, SlashCommandBuilder, ApplicationCommandType } = require("discord.js")
 const { clientId, guildId, token } = require("./config.json")
@@ -54,7 +57,7 @@ const rest = new REST({ version: "10" }).setToken(token)
   try {
     
     // Find commands marked as global
-    const globalCommands = commands.filter(c => !c.isGuildCommand)
+    const globalCommands = filterGlobalCommands(commands)
     
     // and deploy them to the bot using the .put method
     await rest.put(
@@ -64,10 +67,10 @@ const rest = new REST({ version: "10" }).setToken(token)
       .then(data => console.log(`Successfully reloaded ${data.length} application commands.`))
     
     // Using .put with a different Route can register commands to a guild
-    const guildCommands = commands.filter(c => c.guildIds?.includes(guildId))
+    const guildCommands = filterGuildCommands(commands, guildId)
     await rest.put(
       Routes.applicationGuildCommands(clientId, guildId),
-      { body: globalCommands },
+      { body: guildCommands }
     )
       .then(data => console.log(`Successfully reloaded ${data.length} application commands to guild with ID ${guildId}.`))
     
@@ -120,6 +123,8 @@ Adds a single guild id to the list of guilds the command should be registered to
 | PARAMETER | TYPE | DESCRIPTION |
 | --------- | ---- | ----------- |
 | guildId   | [Snowflake](https://discord.js.org/#/docs/discord.js/main/typedef/Snowflake) | The id of the guild to add[^1] |
+
+[^1]: Adding a guild does not update the commands in Discord. They still need to be deployed
 
 Returns: [GuildContextMenuCommandBuilder](#guildcontextmenucommandbuilder-extends-contextmenucommandbuilder)
 
@@ -177,4 +182,25 @@ Replace the list of guild ids with a new list
 
 Returns: [GuildSlashCommandBuilder](#guildslashcommandbuilder-extends-slashcommandbuilder)
 
-[^1]: Adding a guild does not update the commands in Discord. They still need to be deployed
+# Functions
+
+#### <ins>filterGlobalCommands(commandArray)</ins>
+
+Returns a new array containing global commands
+
+| PARAMETER | TYPE | DESCRIPTION |
+| --------- | ---- | ----------- |
+| commandArray | Array <[ContextMenuCommandBuilder](https://discord.js.org/#/docs/builders/main/class/ContextMenuCommandBuilder) \| [SlashCommandBuilder](https://discord.js.org/#/docs/builders/main/class/SlashCommandBuilder)> | The array of commands made with builders |
+
+Returns: Array <[JSONEncodable](https://discord.js.org/#/docs/builders/main/typedef/JSONEncodable) <[APIApplicationCommand](https://discord-api-types.dev/api/discord-api-types-v10/interface/APIApplicationCommand)>>
+
+#### <ins>filterGuildCommands(commandArray, guildId)</ins>
+
+Returns a new array containing guild commands
+
+| PARAMETER | TYPE | DESCRIPTION |
+| --------- | ---- | ----------- |
+| commandArray | Array <[ContextMenuCommandBuilder](https://discord.js.org/#/docs/builders/main/class/ContextMenuCommandBuilder) \| [SlashCommandBuilder](https://discord.js.org/#/docs/builders/main/class/SlashCommandBuilder)> | The array of commands made with builders |
+| guildId   | [Snowflake](https://discord.js.org/#/docs/discord.js/main/typedef/Snowflake) | The id of the guild to filter commands for |
+
+Returns: Array <[JSONEncodable](https://discord.js.org/#/docs/builders/main/typedef/JSONEncodable) <[APIApplicationCommand](https://discord-api-types.dev/api/discord-api-types-v10/interface/APIApplicationCommand)>>

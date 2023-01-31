@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, ContextMenuCommandBuilder } = require("discord.js")
 
-module.exports.GuildSlashCommandBuilder = class extends SlashCommandBuilder {
+class GuildSlashCommandBuilder extends SlashCommandBuilder {
 	
 	constructor() {
 		super()
@@ -30,7 +30,7 @@ module.exports.GuildSlashCommandBuilder = class extends SlashCommandBuilder {
 	}
 }
 
-module.exports.GuildContextMenuCommandBuilder = class extends ContextMenuCommandBuilder {
+class GuildContextMenuCommandBuilder extends ContextMenuCommandBuilder {
 	
 	constructor() {
 		super()
@@ -58,4 +58,19 @@ module.exports.GuildContextMenuCommandBuilder = class extends ContextMenuCommand
 		this.guildIds = guildIds
 		return this
 	}
+}
+
+function filterGlobalCommands(commandArray) {
+	return commandArray.filter(c => !c.isGuildCommand)
+}
+
+function filterGuildCommands(commandArray, guildId) {
+	return commandArray.filter(c => c.guildIds?.includes(guildId))
+}
+
+module.exports = {
+	GuildContextMenuCommandBuilder,
+	GuildSlashCommandBuilder,
+	filterGlobalCommands,
+	filterGuildCommands,
 }
